@@ -1,0 +1,17 @@
+# Flutter/Dart
+.dart_tool/
+.packages
+.pub/
+build/
+android/app/build/
+ios/Runner.build/
+pubspec.lock
+
+# IDE
+.idea/
+.android/
+.ios/
+.vscode/
+
+# OS
+.DS_Store
