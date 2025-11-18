@@ -7,7 +7,6 @@ import 'package:clean_architecture_api/home_page_items/list_items/nav_list_item.
 import 'package:clean_architecture_api/home_page_items/list_items/search_bar_list_item.dart';
 import 'package:clean_architecture_api/home_page_items/list_items/suggestions_item.dart';
 import 'package:clean_architecture_api/home_page_items/list_items/top_courses_item.dart';
-import 'package:clean_architecture_api/widgets/home_page_widget/suggestions_card_widget.dart';
 
 import '../home_page_items/list_items/categories_item.dart';
 import '../home_page_items/list_items/horizontal/suggestions_horizontal_list_item.dart';

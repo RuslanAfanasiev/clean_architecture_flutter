@@ -28,7 +28,7 @@ class _TypographyCoursePageState extends State<TypographyCoursePage> {
     /// Get.lazyPut(() => TypographyController());
     Get.lazyPut(() => Dio());
     Get.lazyPut(() => ApiService(Get.find<Dio>()));
-    Get.lazyPut(() => TypographyController());
+    Get.lazyPut(() => TypographyController(Get.find()));
   }
 
   @override

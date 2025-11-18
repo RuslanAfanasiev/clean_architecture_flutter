@@ -1,9 +1,14 @@
 import 'package:get/get.dart';
-import 'package:clean_architecture_api/json/v1.dart';
 import 'package:clean_architecture_api/home_page_items/typography_page_items/course_item.dart';
+
+import '../services/api_service.dart';
 
 class TypographyController extends GetxController {
   final RxList<CourseItem> items = RxList();
+
+  final ApiService api;
+
+  TypographyController(this.api);
 
   @override
   void onInit() {
@@ -12,7 +17,8 @@ class TypographyController extends GetxController {
   }
 
   Future<void> loadCourse() async {
-    final courseJson = details['course'] as Map<String, dynamic>;
+    final typJson = await api.getDetails() as Map<String, dynamic>;
+    final courseJson = typJson['course'] as Map<String, dynamic>;
     items.add(CourseItem.fromJson(courseJson));
   }
 }

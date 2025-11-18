@@ -12,5 +12,5 @@ abstract class ApiService {
   Future<dynamic> getHomeData();
 
   @GET("/feed/details")
-  Future<CourseItem> getDetails();
+  Future<dynamic> getDetails();
 }
