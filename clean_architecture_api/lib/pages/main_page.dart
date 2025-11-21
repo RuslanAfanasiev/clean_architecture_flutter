@@ -1,6 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:data/datasources/api_service.dart';
+import 'package:data/datasources/feed_remote_data_source.dart';
+import 'package:data/repositories/feed_repository_impl.dart';
+import 'package:domain/repositories/feed_repository.dart';
+import 'package:domain/usecases/get_home_feed.dart';
 import 'package:clean_architecture_api/home_page_items/list_items/categories_item.dart';
 import 'package:clean_architecture_api/home_page_items/list_items/continue_watching_item.dart';
 import 'package:clean_architecture_api/home_page_items/list_items/watching_card_item.dart';
@@ -23,8 +28,6 @@ import 'package:clean_architecture_api/widgets/home_page_widget/suggestions_widg
 import 'package:clean_architecture_api/widgets/home_page_widget/top_courses_widget.dart';
 import 'package:clean_architecture_api/widgets/home_page_widget/top_nav_widget.dart';
 
-import '../services/api_service.dart';
-
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
@@ -40,9 +43,24 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    Get.lazyPut(() => Dio());
-    Get.lazyPut(() => ApiService(Get.find<Dio>()));
-    Get.lazyPut(() => MainController(Get.find<ApiService>()));
+    if (!Get.isRegistered<Dio>()) {
+      Get.lazyPut<Dio>(() => Dio());
+      Get.lazyPut<ApiService>(() => ApiService(Get.find<Dio>()));
+      Get.lazyPut<FeedRemoteDataSource>(
+        () => FeedRemoteDataSourceImpl(Get.find<ApiService>()),
+      );
+      Get.lazyPut<FeedRepository>(
+        () => FeedRepositoryImpl(Get.find<FeedRemoteDataSource>()),
+      );
+      Get.lazyPut<GetHomeFeed>(
+        () => GetHomeFeed(Get.find<FeedRepository>()),
+      );
+    }
+    if (!Get.isRegistered<MainController>()) {
+      Get.lazyPut<MainController>(
+        () => MainController(Get.find<GetHomeFeed>()),
+      );
+    }
 
     // Get.lazyPut(() => MainController());
     // Așteaptă un frame înainte să deschidă tastatura

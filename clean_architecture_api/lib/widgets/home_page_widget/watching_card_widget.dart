@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../home_page_items/list_items/watching_card_item.dart';
 import '../../resources/app_colors.dart';
+import '../../resources/image_fix.dart';
 
 class WatchingCardWidget extends StatelessWidget {
   const WatchingCardWidget({super.key, required this.item});
@@ -35,7 +36,10 @@ class WatchingCardWidget extends StatelessWidget {
                 bottomLeft: Radius.circular(12),
               ),
             ),
-            child: Image.network(item.image, fit: BoxFit.cover),
+            child: Image.network(
+              fixImageUrl(item.image),
+              fit: BoxFit.cover,
+            ),
           ),
 
           const SizedBox(width: 12),

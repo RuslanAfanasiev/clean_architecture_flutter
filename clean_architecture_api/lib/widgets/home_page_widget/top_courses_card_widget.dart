@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:clean_architecture_api/home_page_items/list_items/top_courses_card_item.dart';
 import 'package:clean_architecture_api/resources/app_colors.dart';
 import 'package:clean_architecture_api/resources/app_icons.dart';
+import 'package:clean_architecture_api/resources/image_fix.dart';
 
 class TopCoursesCardWidget extends StatefulWidget {
   const TopCoursesCardWidget({super.key, required this.item});
@@ -40,7 +41,7 @@ class _TopCoursesCardWidgetState extends State<TopCoursesCardWidget> {
               ClipRRect(
                 borderRadius: const BorderRadius.all(Radius.circular(8)),
                 child: Image.network(
-                  widget.item.image,
+                  fixImageUrl(widget.item.image),
                   width: double.infinity,
                   height: 120,
                   fit: BoxFit.cover,

@@ -3,6 +3,7 @@ import 'package:clean_architecture_api/home_page_items/list_items/suggestions_ca
 import 'package:clean_architecture_api/pages/typography_page.dart';
 import 'package:clean_architecture_api/resources/app_colors.dart';
 import 'package:clean_architecture_api/resources/app_icons.dart';
+import 'package:clean_architecture_api/resources/image_fix.dart';
 
 class SuggestionsCardWidget extends StatefulWidget {
   const SuggestionsCardWidget({super.key, required this.item});
@@ -57,7 +58,7 @@ class _SuggestionsCardWidgetState extends State<SuggestionsCardWidget> {
                     bottomRight: Radius.circular(8),
                   ),
                   child: Image.network(
-                    widget.item.image,
+                    fixImageUrl(widget.item.image),
                     width: double.infinity,
                     height: 120,
                     fit: BoxFit.cover,

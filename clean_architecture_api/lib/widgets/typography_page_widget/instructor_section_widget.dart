@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../home_page_items/typography_page_items/instructor_item.dart';
 import '../../resources/app_colors.dart';
+import '../../resources/image_fix.dart';
 
 class InstructorSectionWidget extends StatelessWidget {
   final InstructorItem instructor;
@@ -28,7 +29,9 @@ class InstructorSectionWidget extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 30,
-                backgroundImage: NetworkImage(instructor.image),
+                backgroundImage: NetworkImage(
+                  fixImageUrl(instructor.image),
+                ),
               ),
               const SizedBox(width: 12),
               Expanded(

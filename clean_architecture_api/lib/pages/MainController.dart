@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:domain/usecases/get_home_feed.dart';
 import 'package:clean_architecture_api/home_page_items/list_items/continue_watching_item.dart';
 import 'package:clean_architecture_api/home_page_items/list_items/horizontal/top_courses_horizontal_list_item.dart';
 import 'package:clean_architecture_api/home_page_items/list_items/list_item.dart';
@@ -14,12 +15,12 @@ import '../home_page_items/list_items/horizontal/toggle_button_horizontal_list_i
 import '../home_page_items/list_items/suggestions_card_item.dart';
 import '../home_page_items/list_items/toggle_button_item.dart';
 import '../home_page_items/list_items/top_courses_card_item.dart';
-import '../services/api_service.dart';
+import '../home_page_items/list_items/watching_card_item.dart';
 
 class MainController extends GetxController {
-  final ApiService api;
+  final GetHomeFeed getHomeFeed;
 
-  MainController(this.api);
+  MainController(this.getHomeFeed);
 
   RxList<ListItem> items = <ListItem>[].obs;
 
@@ -31,37 +32,71 @@ class MainController extends GetxController {
 
   Future<void> loadData() async {
     try {
-      final homeJson = await api.getHomeData() as Map<String, dynamic>;
-
+      final homeFeed = await getHomeFeed();
       items.clear();
 
-      final userJson = homeJson['user'];
-      items.add(NavbarListItem.fromJson(userJson));
+      items.add(
+        NavbarListItem(
+          name: homeFeed.user.name,
+          notifications: homeFeed.user.notifications,
+        ),
+      );
 
       items.add(SearchBarListItem());
 
-      final continueWatchingList =
-          homeJson['continueWatching'] as List<dynamic>;
-      items.add(ContinueWatchingItem.fromJson(continueWatchingList));
+      items.add(
+        ContinueWatchingItem(
+          courses: homeFeed.continueWatching
+              .map(
+                (course) => WatchingCardItem(
+                  id: course.id,
+                  title: course.title,
+                  institute: course.institute,
+                  rating: course.rating,
+                  progress: course.progress ?? 0,
+                  image: course.image,
+                ),
+              )
+              .toList(),
+        ),
+      );
 
       items.add(CategoriesItem());
-      final categoriesJson = homeJson['categories'] as List<dynamic>;
-      final categories = categoriesJson
-          .map((e) => ToggleButtonItem.fromJson(e as Map<String, dynamic>))
+      final categories = homeFeed.categories
+          .map(
+            (category) => ToggleButtonItem(
+              name: category.name,
+              id: category.id,
+            ),
+          )
           .toList();
       items.add(ToggleButtonHorizontalListItem(item: categories));
 
       items.add(SuggestionsItem());
-      final suggestionsJson = homeJson['suggestions'] as List<dynamic>;
-      final suggestions = suggestionsJson
-          .map((e) => SuggestionsCardItem.fromJson(e as Map<String, dynamic>))
+      final suggestions = homeFeed.suggestions
+          .map(
+            (course) => SuggestionsCardItem(
+              id: course.id,
+              title: course.title,
+              institute: course.institute,
+              rating: course.rating,
+              image: course.image,
+            ),
+          )
           .toList();
       items.add(SuggestionsHorizontalListItem(item: suggestions));
 
       items.add(TopCoursesItem());
-      final topCoursesJson = homeJson['topCourses'] as List<dynamic>;
-      final topCourses = topCoursesJson
-          .map((e) => TopCoursesCardItem.fromJson(e as Map<String, dynamic>))
+      final topCourses = homeFeed.topCourses
+          .map(
+            (course) => TopCoursesCardItem(
+              id: course.id,
+              title: course.title,
+              institute: course.institute,
+              rating: course.rating,
+              image: course.image,
+            ),
+          )
           .toList();
       items.add(TopCoursesHorizontalListItem(item: topCourses));
     } catch (e) {

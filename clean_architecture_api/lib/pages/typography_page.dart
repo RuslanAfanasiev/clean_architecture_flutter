@@ -1,6 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:data/datasources/api_service.dart';
+import 'package:data/datasources/feed_remote_data_source.dart';
+import 'package:data/repositories/feed_repository_impl.dart';
+import 'package:domain/repositories/feed_repository.dart';
+import 'package:domain/usecases/get_course_detail.dart';
 import 'package:clean_architecture_api/pages/TypographyController.dart';
 import 'package:clean_architecture_api/widgets/typography_page_widget/course_description_section_widget.dart';
 import 'package:clean_architecture_api/widgets/typography_page_widget/course_highlights_section_widget.dart';
@@ -10,8 +15,6 @@ import 'package:clean_architecture_api/widgets/typography_page_widget/instructor
 import 'package:clean_architecture_api/widgets/typography_page_widget/related_courses_section_widget.dart';
 import 'package:clean_architecture_api/widgets/typography_page_widget/skills_section_widget.dart';
 import 'package:clean_architecture_api/widgets/typography_page_widget/typography_header_widget.dart';
-
-import '../services/api_service.dart';
 
 class TypographyCoursePage extends StatefulWidget {
   const TypographyCoursePage({super.key});
@@ -26,9 +29,26 @@ class _TypographyCoursePageState extends State<TypographyCoursePage> {
     super.initState();
 
     /// Get.lazyPut(() => TypographyController());
-    Get.lazyPut(() => Dio());
-    Get.lazyPut(() => ApiService(Get.find<Dio>()));
-    Get.lazyPut(() => TypographyController(Get.find()));
+    if (!Get.isRegistered<Dio>()) {
+      Get.lazyPut<Dio>(() => Dio());
+      Get.lazyPut<ApiService>(() => ApiService(Get.find<Dio>()));
+      Get.lazyPut<FeedRemoteDataSource>(
+        () => FeedRemoteDataSourceImpl(Get.find<ApiService>()),
+      );
+      Get.lazyPut<FeedRepository>(
+        () => FeedRepositoryImpl(Get.find<FeedRemoteDataSource>()),
+      );
+    }
+    if (!Get.isRegistered<GetCourseDetail>()) {
+      Get.lazyPut<GetCourseDetail>(
+        () => GetCourseDetail(Get.find<FeedRepository>()),
+      );
+    }
+    if (!Get.isRegistered<TypographyController>()) {
+      Get.lazyPut<TypographyController>(
+        () => TypographyController(Get.find<GetCourseDetail>()),
+      );
+    }
   }
 
   @override

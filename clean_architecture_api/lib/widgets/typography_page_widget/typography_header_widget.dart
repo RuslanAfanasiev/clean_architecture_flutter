@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../home_page_items/typography_page_items/course_item.dart';
 import '../../resources/app_colors.dart';
 import '../../resources/app_icons.dart';
+import '../../resources/image_fix.dart';
 
 class TypographyHeaderWidget extends StatelessWidget {
   final CourseItem item;
@@ -26,7 +27,7 @@ class TypographyHeaderWidget extends StatelessWidget {
     return Stack(
       children: [
         Image.network(
-          item.thumbnail,
+          fixImageUrl(item.thumbnail),
           height: 240,
           width: double.infinity,
           fit: BoxFit.cover,
